@@ -116,10 +116,24 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .sign{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:16pt;padding-top:12pt}
 .gdpr{margin:0;max-width:377pt;font-style:italic;font-size:.778em;line-height:1.42;color:#64748b}
 .sigbox{width:118.5pt;flex:none;text-align:center;padding-bottom:1.3pt}
-.sig{height:20pt;border-bottom:.75pt solid #94a3b8;display:flex;align-items:flex-end;justify-content:center}
-.sig svg{height:16.4pt;width:auto;display:block}
-.sig img{max-height:19pt;max-width:100%;display:block}
+.sig{min-height:20pt;border-bottom:.75pt solid #94a3b8;display:flex;align-items:flex-end;justify-content:center}
+.sig svg{width:70%;height:auto;display:block}
+.sig img{width:80%;height:auto;display:block}
 .flabel{font-style:italic;font-size:.778em;color:#64748b;margin-top:2.9pt;line-height:1.2}
+
+/* elementi liberi (trascinabili) */
+.fl{position:absolute;z-index:2}
+.fl .sigbox{width:auto}
+.fl .gdpr{max-width:none}
+.ftx{margin:0;line-height:calc(1.45*var(--lh));min-height:1.2em}
+.fl.frame .ftx{background:#f8fafc;border-left:2.25pt solid var(--a);padding:6pt 8pt}
+.fl>img{display:block;width:100%;height:auto}
+.dragging,.dragging *{user-select:none!important;cursor:grabbing!important}
+#grip{position:absolute;z-index:41;display:flex;align-items:center;gap:5px;height:26px;padding:0 9px 0 6px;border-radius:7px 7px 7px 0;background:#2563eb;color:#fff;font:500 12px/1 Roboto,system-ui,sans-serif;cursor:grab;touch-action:none;user-select:none;box-shadow:0 3px 10px rgba(37,99,235,.35)}
+#grip svg{width:15px;height:15px}
+#rsz{position:absolute;z-index:41;width:12px;height:28px;border-radius:4px;background:#fff;border:2px solid #2563eb;cursor:ew-resize;touch-action:none}
+#grip[hidden],#rsz[hidden],#guide[hidden]{display:none}
+#guide{position:absolute;z-index:39;width:0;border-left:1px dashed #db2777;pointer-events:none}
 
 /* modifica */
 .page [contenteditable=true]{outline:1px dashed transparent;outline-offset:1.5pt;border-radius:1px;cursor:text}
@@ -173,7 +187,7 @@ dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:16px 0 0;paddin
 @page{size:A4;margin:0}
 @media print{
   html,body{background:#fff!important}
-  .chrome,.tip,.cbar,.hl,.pop,#toast,dialog,.over{display:none!important}
+  .chrome,.tip,.cbar,.hl,.pop,#toast,dialog,.over,#grip,#rsz,#guide{display:none!important}
   #stage{padding:0}
   #zoom{zoom:1!important;width:auto}
   .doc{gap:0}
@@ -222,12 +236,18 @@ dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:16px 0 0;paddin
     <button class="tb" type="button" data-act="image" title="Inserisci immagine nel testo" aria-label="Inserisci immagine"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 16l5-5 4 4 2-2 5 5M15 9h.01"/></svg></button>
     <button class="tb" type="button" data-act="clear" title="Rimuovi formattazione" aria-label="Rimuovi formattazione"><svg class="i" viewBox="0 0 24 24"><path d="M4 7V5h12v2M10 5l-3 14M5 19h5M15 14l6 6M21 14l-6 6"/></svg></button>
     <span class="grow"></span>
-    <button class="tb wide" type="button" data-pop="addp" title="Aggiungi una nuova sezione"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Aggiungi sezione</button>
+    <button class="tb wide" type="button" data-pop="addp" title="Aggiungi una sezione, una casella di testo, luogo e data, una firma o un'immagine"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Aggiungi</button>
   </div>
 </header>
 
 <div class="pop" id="addp" hidden role="menu">
-  <h4>Nuova sezione (inserita dopo quella selezionata)</h4>
+  <h4>Elementi liberi: si trascinano dove vuoi</h4>
+  <button class="mi" type="button" data-act="addfl" data-t="text"><span>Casella di testo<small>Testo posizionabile ovunque nella pagina</small></span></button>
+  <button class="mi" type="button" data-act="addfl" data-t="date"><span>Luogo e data<small>Es. “Nocera Inferiore, 26/11/2026”</small></span></button>
+  <button class="mi" type="button" data-act="addfl" data-t="sign"><span>Firma<small>Firma originale o immagine da caricare</small></span></button>
+  <button class="mi" type="button" data-act="addfl" data-t="img"><span>Immagine<small>Logo, foto, timbro…</small></span></button>
+  <hr>
+  <h4>Sezioni del CV (inserite dopo quella selezionata)</h4>
   <button class="mi" type="button" data-act="addsec" data-t="box"><span>Testo in riquadro<small>Come “Profilo professionale”</small></span></button>
   <button class="mi" type="button" data-act="addsec" data-t="text"><span>Testo semplice<small>Paragrafo libero</small></span></button>
   <button class="mi" type="button" data-act="addsec" data-t="list"><span>Elenco puntato<small>Punti brevi</small></span></button>
@@ -238,12 +258,14 @@ dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:16px 0 0;paddin
 </div>
 
 <div class="pop" id="filep" hidden role="menu">
-  <button class="mi" type="button" data-act="pdf"><svg class="i" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>Scarica PDF<small>Stampa → “Salva come PDF”, formato A4</small></span></button>
+  <button class="mi" type="button" data-act="pdf"><svg class="i" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>Scarica PDF<small>Scarica subito il file PDF in formato A4</small></span></button>
+  <button class="mi" type="button" data-act="print"><svg class="i" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"/></svg><span>Stampa<small>Apre la finestra di stampa del browser</small></span></button>
   <hr>
   <button class="mi" type="button" data-act="savejson"><svg class="i" viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5zM8 3v6h8V3M8 21v-7h8v7"/></svg><span>Salva copia modificabile<small>File .json da riaprire qui</small></span></button>
   <button class="mi" type="button" data-act="openjson"><svg class="i" viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3zM3 7V5h6"/></svg><span>Apri copia salvata<small>Carica un file .json</small></span></button>
   <hr>
   <button class="mi" type="button" data-act="reset"><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span>Ripristina CV originale<small>Annullabile con Ctrl+Z</small></span></button>
+  <button class="mi" type="button" data-act="restorebak" id="bBak" hidden><svg class="i" viewBox="0 0 24 24"><path d="M12 8v5l3 2M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span>Recupera copia di sicurezza<small>Le modifiche salvate prima dell’aggiornamento del sito</small></span></button>
 </div>
 
 <div class="pop" id="stylep" hidden>
@@ -266,7 +288,7 @@ dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:16px 0 0;paddin
 </div>
 
 <main id="stage">
-  <div class="tip" id="tip"><p><b>Clicca su qualsiasi testo per modificarlo.</b> Passa sopra una sezione o una riga per spostarla, duplicarla o eliminarla. Le modifiche restano in questo browser; usa “Scarica PDF” per esportare.</p><button type="button" data-act="tipx" aria-label="Chiudi suggerimento">Chiudi</button></div>
+  <div class="tip" id="tip"><p><b>Clicca su qualsiasi testo per modificarlo.</b> Passa sopra una sezione o una riga per spostarla, duplicarla o eliminarla. Firma, privacy e gli elementi aggiunti con “Aggiungi” si trascinano dalla linguetta blu “Sposta”. Le modifiche restano in questo browser; usa “Scarica PDF” per esportare.</p><button type="button" data-act="tipx" aria-label="Chiudi suggerimento">Chiudi</button></div>
   <div id="zoom">
 <div id="doc" class="doc">
 <div class="page">
@@ -318,11 +340,9 @@ dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:16px 0 0;paddin
 <tr><td class="b">Lingue</td><td><b>Italiano:</b> Madrelingua<span class="dot">•</span><b>Inglese:</b> B2<span class="dot">•</span><b>Spagnolo:</b> B1<span class="dot">•</span><b>Francese:</b> A2</td></tr>
 </tbody></table>
 </section>
-<div class="blk sign" data-k="sign">
-<p class="gdpr">Autorizzo il trattamento dei miei dati personali presenti nel curriculum vitae ai sensi del D.Lgs. 2018/101 e del GDPR (Regolamento UE 2016/679) e ss.mm.ii. per le finalità di ricerca, valutazione e selezione del personale.</p>
-<div class="sigbox"><div class="sig"><svg xmlns="http://www.w3.org/2000/svg" aria-label="Firma" role="img" viewBox="0 0 93.5 18.4"><path fill="#000" fill-rule="nonzero" d="M1.55 17.15C1.16 16.97 1.00 16.57 1.00 15.80C1.01 13.18 1.85 10.80 3.86 7.78C4.61 6.64 5.19 5.93 6.09 5.02C7.31 3.79 8.34 3.19 9.25 3.18C9.99 3.17 10.37 3.50 10.37 4.16C10.37 5.14 9.48 7.04 8.61 7.94C8.16 8.40 7.16 9.10 6.94 9.10C6.73 9.10 6.55 8.89 6.58 8.66C6.60 8.51 6.70 8.41 7.11 8.14C7.71 7.75 8.19 7.30 8.50 6.84C9.03 6.03 9.58 4.69 9.58 4.18C9.58 3.94 9.38 3.90 8.88 4.03C7.64 4.35 5.98 5.97 4.39 8.42C3.18 10.27 2.43 11.86 2.08 13.30C1.79 14.51 1.70 16.29 1.92 16.44C2.06 16.52 2.56 16.51 2.95 16.41C3.43 16.29 3.77 16.03 4.30 15.39C4.98 14.57 5.35 14.21 5.51 14.21C5.58 14.21 5.72 14.28 5.83 14.36C6.00 14.51 6.01 14.55 6.04 15.31C6.07 15.96 6.10 16.12 6.20 16.23C6.37 16.42 6.67 16.41 6.93 16.20C7.16 16.03 7.61 15.34 7.61 15.17C7.61 15.11 7.51 15.00 7.39 14.93C6.97 14.67 6.87 14.46 6.91 13.91C6.94 13.50 6.97 13.40 7.14 13.18C7.57 12.63 8.27 12.66 8.58 13.22C8.72 13.49 8.73 13.57 8.71 14.08C8.69 14.38 8.65 14.68 8.63 14.74C8.55 14.95 8.95 15.09 9.60 15.09C10.17 15.09 10.18 15.09 10.36 14.88C10.51 14.72 10.59 14.50 10.76 13.77C11.03 12.58 11.14 12.33 11.44 12.08L11.69 11.88L12.95 11.88C14.14 11.88 14.23 11.89 14.40 12.02C14.81 12.32 14.85 12.46 14.88 14.02C14.91 15.29 14.93 15.45 15.04 15.57C15.11 15.65 15.21 15.71 15.26 15.71C15.39 15.71 15.98 15.10 16.36 14.56C16.88 13.81 17.18 13.49 17.42 13.39C17.75 13.25 17.83 13.26 18.10 13.51C18.37 13.76 18.49 14.06 18.69 15.06C18.76 15.44 18.85 15.77 18.88 15.80C18.91 15.83 19.02 15.71 19.12 15.52C19.22 15.34 19.50 14.85 19.73 14.42C20.27 13.45 20.69 12.99 21.12 12.93C21.64 12.85 21.95 13.09 22.35 13.89C22.63 14.44 22.82 14.63 23.17 14.69C23.66 14.78 24.15 14.44 23.98 14.13C23.88 13.95 23.93 12.73 24.05 12.50C24.29 12.03 24.62 11.92 24.95 12.20C25.12 12.35 25.13 12.39 25.13 12.87C25.13 13.16 25.11 13.54 25.08 13.73L25.02 14.08L25.22 14.08C25.33 14.08 25.58 14.14 25.76 14.21C26.49 14.50 26.60 14.36 27.24 12.34C27.45 11.67 27.62 11.50 27.96 11.62C28.12 11.68 28.17 11.76 28.36 12.36C28.61 13.13 28.81 13.38 29.22 13.45C29.51 13.50 29.76 13.41 30.33 13.07C31.08 12.61 31.60 12.61 32.32 13.08C32.85 13.43 35.05 15.13 35.05 15.19C35.05 15.22 35.07 15.29 35.09 15.34C35.14 15.46 34.85 15.78 34.70 15.78C34.65 15.78 34.13 15.42 33.55 14.98C31.77 13.62 31.61 13.52 31.32 13.53C31.15 13.53 30.94 13.62 30.65 13.80C30.07 14.16 29.67 14.29 29.25 14.25C28.62 14.17 28.23 13.94 27.93 13.44L27.81 13.22L27.56 13.86C27.37 14.34 27.23 14.56 27.01 14.80C26.62 15.19 26.32 15.25 25.77 15.05C25.56 14.98 25.23 14.89 25.04 14.85C24.69 14.79 24.67 14.80 24.56 14.96C24.49 15.05 24.30 15.21 24.13 15.30C23.86 15.46 23.76 15.48 23.33 15.47C23.05 15.47 22.74 15.42 22.61 15.36C22.29 15.23 21.94 14.83 21.67 14.29C21.55 14.04 21.40 13.80 21.34 13.75C21.14 13.59 20.85 13.99 19.83 15.88C19.41 16.63 19.08 16.86 18.57 16.72C18.32 16.65 18.12 16.20 17.90 15.20C17.79 14.68 17.69 14.24 17.66 14.21C17.62 14.17 17.49 14.33 17.11 14.87C16.08 16.36 15.35 16.79 14.67 16.32C14.19 15.99 14.14 15.80 14.10 14.21C14.08 13.43 14.04 12.76 14.01 12.72C13.95 12.62 12.23 12.60 11.98 12.70C11.84 12.75 11.80 12.85 11.64 13.53C11.42 14.48 11.25 15.04 11.10 15.26C10.91 15.55 10.60 15.77 10.27 15.85C9.87 15.95 8.91 15.89 8.57 15.75C8.29 15.63 8.30 15.62 8.08 16.04C7.58 16.97 6.71 17.39 5.99 17.05C5.53 16.83 5.26 16.35 5.26 15.71L5.26 15.48L5.08 15.71C4.46 16.51 3.80 17.02 3.15 17.19C2.65 17.32 1.88 17.30 1.55 17.15ZM7.94 13.94C7.94 13.71 7.92 13.62 7.85 13.62C7.74 13.62 7.68 13.76 7.68 14.00C7.68 14.20 7.72 14.27 7.85 14.27C7.92 14.27 7.94 14.17 7.94 13.94ZM45.50 16.29C45.14 15.95 45.13 15.69 45.15 10.51C45.17 6.26 45.16 5.95 45.05 5.35C44.92 4.73 44.92 4.71 45.04 4.58C45.19 4.42 45.48 4.41 45.61 4.56C45.67 4.63 45.77 4.96 45.83 5.30C45.95 5.88 45.96 6.23 45.94 10.57C45.92 13.47 45.94 15.28 45.98 15.39C46.04 15.54 46.06 15.51 46.31 14.99C46.45 14.69 46.81 13.65 47.10 12.69C47.39 11.73 47.79 10.45 48.00 9.84C48.49 8.36 50.53 2.90 50.81 2.31C51.25 1.38 51.99 1.00 52.18 1.61C52.21 1.73 52.16 1.83 51.92 2.08C51.55 2.47 51.52 2.55 50.38 5.59C49.87 6.96 49.41 8.20 49.35 8.35C49.12 8.94 48.38 11.20 47.88 12.83C47.32 14.67 47.20 15.03 46.93 15.55C46.65 16.09 46.20 16.50 45.86 16.50C45.79 16.50 45.62 16.40 45.50 16.29ZM48.78 14.87C48.59 14.65 48.65 14.46 49.04 14.07C50.16 12.98 50.88 12.06 51.49 10.90C51.99 9.96 52.11 9.82 52.38 9.82C52.68 9.82 52.85 10.00 52.90 10.39C53.00 11.22 53.02 11.25 53.44 11.30C53.96 11.36 54.30 10.98 54.97 9.56C55.70 8.04 55.68 8.07 55.89 7.98C56.05 7.91 56.16 7.91 56.39 7.98L56.68 8.05L56.95 7.77C57.32 7.37 57.60 7.24 57.96 7.28C58.56 7.35 58.85 7.94 58.57 8.53C58.39 8.89 58.13 9.03 57.61 9.03L57.24 9.03L57.27 9.90C57.30 10.87 57.38 11.14 57.73 11.51C57.97 11.75 58.42 12.01 58.74 12.07C59.21 12.15 59.54 11.93 60.18 11.08C60.38 10.82 60.60 10.57 60.66 10.54C60.81 10.46 61.12 10.45 61.23 10.53C61.35 10.60 61.49 10.99 61.55 11.39C61.59 11.68 61.64 11.79 61.83 11.99C62.29 12.45 62.97 12.40 63.55 11.86C63.86 11.57 63.88 11.54 63.80 11.39C63.62 10.98 64.16 10.05 64.85 9.56C65.06 9.41 65.44 9.21 65.68 9.11C66.09 8.95 66.21 8.94 67.05 8.94C67.92 8.93 67.98 8.94 68.30 9.11L68.64 9.29L68.93 8.95C69.56 8.21 69.87 7.67 70.33 6.53C70.77 5.42 72.23 2.36 72.43 2.14C72.64 1.91 73.10 2.07 73.10 2.38C73.10 2.54 72.66 3.79 72.30 4.69C71.95 5.54 71.40 6.64 70.95 7.40C70.78 7.71 70.59 8.08 70.53 8.25C70.18 9.29 69.93 10.61 69.99 11.05C70.06 11.47 70.17 11.52 71.11 11.52L71.90 11.52L72.05 11.17C72.32 10.51 72.88 10.15 73.42 10.31C73.68 10.39 73.72 10.38 74.07 10.21C74.50 9.99 74.68 9.97 74.82 10.13C75.02 10.36 75.02 10.53 74.82 10.95C74.44 11.74 73.74 12.23 72.91 12.29C72.55 12.32 72.44 12.35 72.41 12.44C72.28 12.88 71.83 13.04 71.62 12.73C71.56 12.64 71.53 12.51 71.55 12.44C71.58 12.31 71.55 12.31 70.95 12.31C70.19 12.31 69.90 12.23 69.60 11.97C69.20 11.62 69.08 10.83 69.28 9.88L69.32 9.72L69.18 9.88C69.10 9.98 69.05 10.15 69.04 10.28C69.04 10.66 68.87 11.36 68.68 11.72C68.43 12.22 68.05 12.59 67.59 12.81C67.22 12.97 67.10 12.99 66.55 12.99C65.80 12.99 65.44 12.84 65.03 12.36C64.87 12.16 64.71 12.05 64.63 12.05C64.55 12.05 64.35 12.18 64.17 12.37C64.00 12.54 63.69 12.77 63.49 12.87C63.17 13.03 63.04 13.06 62.59 13.06C61.98 13.05 61.56 12.90 61.24 12.56C61.02 12.32 60.79 11.91 60.79 11.76C60.79 11.70 60.56 11.89 60.28 12.17C59.88 12.58 59.71 12.70 59.42 12.80C58.50 13.10 57.23 12.45 56.72 11.40C56.51 10.99 56.51 10.95 56.48 9.92C56.45 8.92 56.43 8.78 56.25 8.77C56.22 8.77 56.17 8.87 56.13 8.98C56.09 9.10 55.83 9.64 55.56 10.17C55.16 10.96 55.00 11.23 54.67 11.56C54.15 12.09 53.65 12.23 52.99 12.03C52.72 11.96 52.28 11.56 52.28 11.41C52.28 11.21 52.14 11.36 51.89 11.81C51.50 12.52 50.91 13.27 50.03 14.18C49.20 15.04 49.03 15.14 48.78 14.87ZM67.21 12.11C67.37 12.03 67.57 11.91 67.66 11.83C67.80 11.70 68.13 11.13 68.13 11.02C68.13 11.00 67.99 11.09 67.83 11.23C67.44 11.55 66.62 11.97 66.29 12.02C66.02 12.06 65.95 12.15 66.15 12.20C66.44 12.27 66.93 12.23 67.21 12.11ZM73.46 11.34L73.66 11.24L73.37 11.14C73.08 11.05 73.08 11.05 72.93 11.22C72.84 11.32 72.78 11.43 72.78 11.47C72.78 11.56 73.19 11.48 73.46 11.34ZM66.66 11.03C66.96 10.89 67.31 10.63 67.61 10.35L68.09 9.90L67.93 9.82C67.84 9.77 67.50 9.72 67.17 9.70C66.68 9.68 66.48 9.70 66.12 9.81C65.63 9.97 65.05 10.33 64.89 10.57C64.79 10.73 64.79 10.74 64.98 10.83C65.09 10.89 65.22 11.03 65.28 11.14C65.39 11.34 65.39 11.34 65.79 11.30C66.06 11.27 66.36 11.18 66.66 11.03ZM57.87 8.19C57.94 8.08 57.80 8.05 57.67 8.15C57.55 8.24 57.55 8.24 57.69 8.24C57.77 8.25 57.85 8.22 57.87 8.19ZM74.85 11.99C74.63 11.75 74.71 11.59 75.38 10.89C75.73 10.52 76.20 10.03 76.42 9.80C76.96 9.21 77.32 9.14 77.68 9.57C78.20 10.20 78.22 10.21 78.79 10.21C79.19 10.21 79.46 10.26 79.96 10.42C80.53 10.60 80.69 10.62 81.46 10.63L82.32 10.64L82.65 10.28C82.97 9.94 82.99 9.93 83.26 9.97C83.43 9.99 83.67 10.10 83.89 10.26C84.69 10.83 85.20 10.99 86.14 11.00C86.56 11.00 86.68 10.97 87.02 10.79L87.41 10.58L89.15 10.58L90.88 10.57L91.34 10.38C91.59 10.28 91.92 10.19 92.06 10.19C92.28 10.18 92.33 10.21 92.42 10.36C92.51 10.52 92.51 10.55 92.39 10.71C92.32 10.80 92.09 10.95 91.87 11.04C91.19 11.33 90.63 11.40 89.05 11.38L87.61 11.37L87.25 11.56C86.91 11.74 86.86 11.75 86.01 11.75C84.80 11.75 84.46 11.63 83.35 10.84C83.30 10.80 83.19 10.86 83.02 11.04C82.66 11.41 82.38 11.48 81.32 11.44C80.62 11.41 80.35 11.36 79.82 11.20C79.36 11.05 79.05 11.00 78.72 11.00C78.04 11.00 77.79 10.90 77.43 10.49L77.11 10.14L76.86 10.45C76.72 10.62 76.31 11.07 75.96 11.44C75.27 12.15 75.08 12.24 74.85 11.99Z"/></svg></div><div class="flabel">Firma</div></div>
 </div>
-</div>
+<div class="fl onlast" data-k="ftext" data-b="791" style="left:42.5pt;top:771pt;width:377pt"><p class="ftx gdpr">Autorizzo il trattamento dei miei dati personali presenti nel curriculum vitae ai sensi del D.Lgs. 2018/101 e del GDPR (Regolamento UE 2016/679) e ss.mm.ii. per le finalità di ricerca, valutazione e selezione del personale.</p></div>
+<div class="fl onlast" data-k="fsig" data-b="789.1" style="left:434.3pt;top:757.8pt;width:118.5pt"><div class="sigbox"><div class="sig"><svg xmlns="http://www.w3.org/2000/svg" aria-label="Firma" role="img" viewBox="0 0 93.5 18.4"><path fill="#000" fill-rule="nonzero" d="M1.55 17.15C1.16 16.97 1.00 16.57 1.00 15.80C1.01 13.18 1.85 10.80 3.86 7.78C4.61 6.64 5.19 5.93 6.09 5.02C7.31 3.79 8.34 3.19 9.25 3.18C9.99 3.17 10.37 3.50 10.37 4.16C10.37 5.14 9.48 7.04 8.61 7.94C8.16 8.40 7.16 9.10 6.94 9.10C6.73 9.10 6.55 8.89 6.58 8.66C6.60 8.51 6.70 8.41 7.11 8.14C7.71 7.75 8.19 7.30 8.50 6.84C9.03 6.03 9.58 4.69 9.58 4.18C9.58 3.94 9.38 3.90 8.88 4.03C7.64 4.35 5.98 5.97 4.39 8.42C3.18 10.27 2.43 11.86 2.08 13.30C1.79 14.51 1.70 16.29 1.92 16.44C2.06 16.52 2.56 16.51 2.95 16.41C3.43 16.29 3.77 16.03 4.30 15.39C4.98 14.57 5.35 14.21 5.51 14.21C5.58 14.21 5.72 14.28 5.83 14.36C6.00 14.51 6.01 14.55 6.04 15.31C6.07 15.96 6.10 16.12 6.20 16.23C6.37 16.42 6.67 16.41 6.93 16.20C7.16 16.03 7.61 15.34 7.61 15.17C7.61 15.11 7.51 15.00 7.39 14.93C6.97 14.67 6.87 14.46 6.91 13.91C6.94 13.50 6.97 13.40 7.14 13.18C7.57 12.63 8.27 12.66 8.58 13.22C8.72 13.49 8.73 13.57 8.71 14.08C8.69 14.38 8.65 14.68 8.63 14.74C8.55 14.95 8.95 15.09 9.60 15.09C10.17 15.09 10.18 15.09 10.36 14.88C10.51 14.72 10.59 14.50 10.76 13.77C11.03 12.58 11.14 12.33 11.44 12.08L11.69 11.88L12.95 11.88C14.14 11.88 14.23 11.89 14.40 12.02C14.81 12.32 14.85 12.46 14.88 14.02C14.91 15.29 14.93 15.45 15.04 15.57C15.11 15.65 15.21 15.71 15.26 15.71C15.39 15.71 15.98 15.10 16.36 14.56C16.88 13.81 17.18 13.49 17.42 13.39C17.75 13.25 17.83 13.26 18.10 13.51C18.37 13.76 18.49 14.06 18.69 15.06C18.76 15.44 18.85 15.77 18.88 15.80C18.91 15.83 19.02 15.71 19.12 15.52C19.22 15.34 19.50 14.85 19.73 14.42C20.27 13.45 20.69 12.99 21.12 12.93C21.64 12.85 21.95 13.09 22.35 13.89C22.63 14.44 22.82 14.63 23.17 14.69C23.66 14.78 24.15 14.44 23.98 14.13C23.88 13.95 23.93 12.73 24.05 12.50C24.29 12.03 24.62 11.92 24.95 12.20C25.12 12.35 25.13 12.39 25.13 12.87C25.13 13.16 25.11 13.54 25.08 13.73L25.02 14.08L25.22 14.08C25.33 14.08 25.58 14.14 25.76 14.21C26.49 14.50 26.60 14.36 27.24 12.34C27.45 11.67 27.62 11.50 27.96 11.62C28.12 11.68 28.17 11.76 28.36 12.36C28.61 13.13 28.81 13.38 29.22 13.45C29.51 13.50 29.76 13.41 30.33 13.07C31.08 12.61 31.60 12.61 32.32 13.08C32.85 13.43 35.05 15.13 35.05 15.19C35.05 15.22 35.07 15.29 35.09 15.34C35.14 15.46 34.85 15.78 34.70 15.78C34.65 15.78 34.13 15.42 33.55 14.98C31.77 13.62 31.61 13.52 31.32 13.53C31.15 13.53 30.94 13.62 30.65 13.80C30.07 14.16 29.67 14.29 29.25 14.25C28.62 14.17 28.23 13.94 27.93 13.44L27.81 13.22L27.56 13.86C27.37 14.34 27.23 14.56 27.01 14.80C26.62 15.19 26.32 15.25 25.77 15.05C25.56 14.98 25.23 14.89 25.04 14.85C24.69 14.79 24.67 14.80 24.56 14.96C24.49 15.05 24.30 15.21 24.13 15.30C23.86 15.46 23.76 15.48 23.33 15.47C23.05 15.47 22.74 15.42 22.61 15.36C22.29 15.23 21.94 14.83 21.67 14.29C21.55 14.04 21.40 13.80 21.34 13.75C21.14 13.59 20.85 13.99 19.83 15.88C19.41 16.63 19.08 16.86 18.57 16.72C18.32 16.65 18.12 16.20 17.90 15.20C17.79 14.68 17.69 14.24 17.66 14.21C17.62 14.17 17.49 14.33 17.11 14.87C16.08 16.36 15.35 16.79 14.67 16.32C14.19 15.99 14.14 15.80 14.10 14.21C14.08 13.43 14.04 12.76 14.01 12.72C13.95 12.62 12.23 12.60 11.98 12.70C11.84 12.75 11.80 12.85 11.64 13.53C11.42 14.48 11.25 15.04 11.10 15.26C10.91 15.55 10.60 15.77 10.27 15.85C9.87 15.95 8.91 15.89 8.57 15.75C8.29 15.63 8.30 15.62 8.08 16.04C7.58 16.97 6.71 17.39 5.99 17.05C5.53 16.83 5.26 16.35 5.26 15.71L5.26 15.48L5.08 15.71C4.46 16.51 3.80 17.02 3.15 17.19C2.65 17.32 1.88 17.30 1.55 17.15ZM7.94 13.94C7.94 13.71 7.92 13.62 7.85 13.62C7.74 13.62 7.68 13.76 7.68 14.00C7.68 14.20 7.72 14.27 7.85 14.27C7.92 14.27 7.94 14.17 7.94 13.94ZM45.50 16.29C45.14 15.95 45.13 15.69 45.15 10.51C45.17 6.26 45.16 5.95 45.05 5.35C44.92 4.73 44.92 4.71 45.04 4.58C45.19 4.42 45.48 4.41 45.61 4.56C45.67 4.63 45.77 4.96 45.83 5.30C45.95 5.88 45.96 6.23 45.94 10.57C45.92 13.47 45.94 15.28 45.98 15.39C46.04 15.54 46.06 15.51 46.31 14.99C46.45 14.69 46.81 13.65 47.10 12.69C47.39 11.73 47.79 10.45 48.00 9.84C48.49 8.36 50.53 2.90 50.81 2.31C51.25 1.38 51.99 1.00 52.18 1.61C52.21 1.73 52.16 1.83 51.92 2.08C51.55 2.47 51.52 2.55 50.38 5.59C49.87 6.96 49.41 8.20 49.35 8.35C49.12 8.94 48.38 11.20 47.88 12.83C47.32 14.67 47.20 15.03 46.93 15.55C46.65 16.09 46.20 16.50 45.86 16.50C45.79 16.50 45.62 16.40 45.50 16.29ZM48.78 14.87C48.59 14.65 48.65 14.46 49.04 14.07C50.16 12.98 50.88 12.06 51.49 10.90C51.99 9.96 52.11 9.82 52.38 9.82C52.68 9.82 52.85 10.00 52.90 10.39C53.00 11.22 53.02 11.25 53.44 11.30C53.96 11.36 54.30 10.98 54.97 9.56C55.70 8.04 55.68 8.07 55.89 7.98C56.05 7.91 56.16 7.91 56.39 7.98L56.68 8.05L56.95 7.77C57.32 7.37 57.60 7.24 57.96 7.28C58.56 7.35 58.85 7.94 58.57 8.53C58.39 8.89 58.13 9.03 57.61 9.03L57.24 9.03L57.27 9.90C57.30 10.87 57.38 11.14 57.73 11.51C57.97 11.75 58.42 12.01 58.74 12.07C59.21 12.15 59.54 11.93 60.18 11.08C60.38 10.82 60.60 10.57 60.66 10.54C60.81 10.46 61.12 10.45 61.23 10.53C61.35 10.60 61.49 10.99 61.55 11.39C61.59 11.68 61.64 11.79 61.83 11.99C62.29 12.45 62.97 12.40 63.55 11.86C63.86 11.57 63.88 11.54 63.80 11.39C63.62 10.98 64.16 10.05 64.85 9.56C65.06 9.41 65.44 9.21 65.68 9.11C66.09 8.95 66.21 8.94 67.05 8.94C67.92 8.93 67.98 8.94 68.30 9.11L68.64 9.29L68.93 8.95C69.56 8.21 69.87 7.67 70.33 6.53C70.77 5.42 72.23 2.36 72.43 2.14C72.64 1.91 73.10 2.07 73.10 2.38C73.10 2.54 72.66 3.79 72.30 4.69C71.95 5.54 71.40 6.64 70.95 7.40C70.78 7.71 70.59 8.08 70.53 8.25C70.18 9.29 69.93 10.61 69.99 11.05C70.06 11.47 70.17 11.52 71.11 11.52L71.90 11.52L72.05 11.17C72.32 10.51 72.88 10.15 73.42 10.31C73.68 10.39 73.72 10.38 74.07 10.21C74.50 9.99 74.68 9.97 74.82 10.13C75.02 10.36 75.02 10.53 74.82 10.95C74.44 11.74 73.74 12.23 72.91 12.29C72.55 12.32 72.44 12.35 72.41 12.44C72.28 12.88 71.83 13.04 71.62 12.73C71.56 12.64 71.53 12.51 71.55 12.44C71.58 12.31 71.55 12.31 70.95 12.31C70.19 12.31 69.90 12.23 69.60 11.97C69.20 11.62 69.08 10.83 69.28 9.88L69.32 9.72L69.18 9.88C69.10 9.98 69.05 10.15 69.04 10.28C69.04 10.66 68.87 11.36 68.68 11.72C68.43 12.22 68.05 12.59 67.59 12.81C67.22 12.97 67.10 12.99 66.55 12.99C65.80 12.99 65.44 12.84 65.03 12.36C64.87 12.16 64.71 12.05 64.63 12.05C64.55 12.05 64.35 12.18 64.17 12.37C64.00 12.54 63.69 12.77 63.49 12.87C63.17 13.03 63.04 13.06 62.59 13.06C61.98 13.05 61.56 12.90 61.24 12.56C61.02 12.32 60.79 11.91 60.79 11.76C60.79 11.70 60.56 11.89 60.28 12.17C59.88 12.58 59.71 12.70 59.42 12.80C58.50 13.10 57.23 12.45 56.72 11.40C56.51 10.99 56.51 10.95 56.48 9.92C56.45 8.92 56.43 8.78 56.25 8.77C56.22 8.77 56.17 8.87 56.13 8.98C56.09 9.10 55.83 9.64 55.56 10.17C55.16 10.96 55.00 11.23 54.67 11.56C54.15 12.09 53.65 12.23 52.99 12.03C52.72 11.96 52.28 11.56 52.28 11.41C52.28 11.21 52.14 11.36 51.89 11.81C51.50 12.52 50.91 13.27 50.03 14.18C49.20 15.04 49.03 15.14 48.78 14.87ZM67.21 12.11C67.37 12.03 67.57 11.91 67.66 11.83C67.80 11.70 68.13 11.13 68.13 11.02C68.13 11.00 67.99 11.09 67.83 11.23C67.44 11.55 66.62 11.97 66.29 12.02C66.02 12.06 65.95 12.15 66.15 12.20C66.44 12.27 66.93 12.23 67.21 12.11ZM73.46 11.34L73.66 11.24L73.37 11.14C73.08 11.05 73.08 11.05 72.93 11.22C72.84 11.32 72.78 11.43 72.78 11.47C72.78 11.56 73.19 11.48 73.46 11.34ZM66.66 11.03C66.96 10.89 67.31 10.63 67.61 10.35L68.09 9.90L67.93 9.82C67.84 9.77 67.50 9.72 67.17 9.70C66.68 9.68 66.48 9.70 66.12 9.81C65.63 9.97 65.05 10.33 64.89 10.57C64.79 10.73 64.79 10.74 64.98 10.83C65.09 10.89 65.22 11.03 65.28 11.14C65.39 11.34 65.39 11.34 65.79 11.30C66.06 11.27 66.36 11.18 66.66 11.03ZM57.87 8.19C57.94 8.08 57.80 8.05 57.67 8.15C57.55 8.24 57.55 8.24 57.69 8.24C57.77 8.25 57.85 8.22 57.87 8.19ZM74.85 11.99C74.63 11.75 74.71 11.59 75.38 10.89C75.73 10.52 76.20 10.03 76.42 9.80C76.96 9.21 77.32 9.14 77.68 9.57C78.20 10.20 78.22 10.21 78.79 10.21C79.19 10.21 79.46 10.26 79.96 10.42C80.53 10.60 80.69 10.62 81.46 10.63L82.32 10.64L82.65 10.28C82.97 9.94 82.99 9.93 83.26 9.97C83.43 9.99 83.67 10.10 83.89 10.26C84.69 10.83 85.20 10.99 86.14 11.00C86.56 11.00 86.68 10.97 87.02 10.79L87.41 10.58L89.15 10.58L90.88 10.57L91.34 10.38C91.59 10.28 91.92 10.19 92.06 10.19C92.28 10.18 92.33 10.21 92.42 10.36C92.51 10.52 92.51 10.55 92.39 10.71C92.32 10.80 92.09 10.95 91.87 11.04C91.19 11.33 90.63 11.40 89.05 11.38L87.61 11.37L87.25 11.56C86.91 11.74 86.86 11.75 86.01 11.75C84.80 11.75 84.46 11.63 83.35 10.84C83.30 10.80 83.19 10.86 83.02 11.04C82.66 11.41 82.38 11.48 81.32 11.44C80.62 11.41 80.35 11.36 79.82 11.20C79.36 11.05 79.05 11.00 78.72 11.00C78.04 11.00 77.79 10.90 77.43 10.49L77.11 10.14L76.86 10.45C76.72 10.62 76.31 11.07 75.96 11.44C75.27 12.15 75.08 12.24 74.85 11.99Z"/></svg></div><div class="flabel">Firma</div></div></div>
 <footer class="pfoot"><span class="ftext">Curriculum Vitae — Dott.ssa Carmen Vicidomini (Albo A Psicologi Campania n. 13058)</span><span class="pnum">Pagina 2 di 2</span></footer>
 </div>
 </div>
@@ -333,6 +353,9 @@ dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:16px 0 0;paddin
 <div class="cbar" id="ibar" hidden></div>
 <div class="hl" id="hl" hidden></div>
 <div class="hl it" id="hli" hidden></div>
+<div id="grip" hidden title="Trascina per spostare"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/></svg>Sposta</div>
+<div id="rsz" hidden title="Trascina per cambiare la larghezza"></div>
+<div id="guide" hidden></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="fileIn" hidden>
 
@@ -342,7 +365,8 @@ dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:16px 0 0;paddin
 {
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const KEY='cv-editor:carmen-vicidomini:v1',TIPK=KEY+':tip';
-const EDIT='h1,h2,.albo,.field,.sh,th,td,.txt,.proj,.ftext,.gdpr,.flabel';
+const EDIT='h1,h2,.albo,.field,.sh,th,td,.txt,.proj,.ftext,.gdpr,.flabel,.ftx';
+const BAK=KEY+':backup-v1',PW=595.28,PH=841.89;
 const zoomEl=$('#zoom'),bbar=$('#bbar'),ibar=$('#ibar'),hl=$('#hl'),hli=$('#hli'),toastEl=$('#toast');
 let doc=$('#doc');
 const ORIG=doc.outerHTML,SIG=$('.sig',doc).innerHTML;
@@ -350,7 +374,7 @@ let mode='edit',hist=[],hi=-1,tIn=0,savedRange=null,curB=null,curI=null,curCell=
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}};
 
 /* ---------- icone ---------- */
-const P={up:'M12 19V5M5 12l7-7 7 7',down:'M12 5v14M19 12l-7 7-7-7',dup:'M9 9h11v11H9zM5 15H4V4h11v1',del:'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6',add:'M12 5v14M5 12h14',insert:'M4 6h16M4 11h9M4 16h9M18 13v8M14 17h8',pb:'M6 3v5h12V3M6 21v-5h12v5M3 12h2M8 12h2M13 12h2M18 12h3',photo:'M3 7h4l2-3h6l2 3h4v13H3zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',nophoto:'M3 7h4l2-3h6l2 3h4v13H3zM9 10l6 6M15 10l-6 6',field:'M4 7h9M4 12h9M4 17h6M18 9v8M14 13h8',sig:'M3 17c3-6 5-8 7-6s-3 6 0 7 5-6 7-5 1 3 4 2M3 21h18',reset:'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',colL:'M12 4v16M12 4h8v16h-8M2 12h6M5 9v6',colR:'M12 4v16M12 4H4v16h8M16 12h6M19 9v6',colW:'M8 8l-4 4 4 4M16 8l4 4-4 4M4 12h16',colN:'M2 12h6M5 9l3 3-3 3M22 12h-6M19 9l-3 3 3 3M12 4v16',colDel:'M9 4h6v16H9zM2 9l4 4M6 9l-4 4'};
+const P={up:'M12 19V5M5 12l7-7 7 7',down:'M12 5v14M19 12l-7 7-7-7',dup:'M9 9h11v11H9zM5 15H4V4h11v1',del:'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6',add:'M12 5v14M5 12h14',insert:'M4 6h16M4 11h9M4 16h9M18 13v8M14 17h8',pb:'M6 3v5h12V3M6 21v-5h12v5M3 12h2M8 12h2M13 12h2M18 12h3',photo:'M3 7h4l2-3h6l2 3h4v13H3zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',nophoto:'M3 7h4l2-3h6l2 3h4v13H3zM9 10l6 6M15 10l-6 6',field:'M4 7h9M4 12h9M4 17h6M18 9v8M14 13h8',sig:'M3 17c3-6 5-8 7-6s-3 6 0 7 5-6 7-5 1 3 4 2M3 21h18',reset:'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',colL:'M12 4v16M12 4h8v16h-8M2 12h6M5 9v6',colR:'M12 4v16M12 4H4v16h8M16 12h6M19 9v6',colW:'M8 8l-4 4 4 4M16 8l4 4-4 4M4 12h16',colN:'M2 12h6M5 9l3 3-3 3M22 12h-6M19 9l-3 3 3 3M12 4v16',colDel:'M9 4h6v16H9zM2 9l4 4M6 9l-4 4',alL:'M4 3v18M8 8h12M8 16h8',alC:'M12 3v18M5 8h14M7 16h10',alR:'M20 3v18M4 8h12M8 16h8',frame:'M4 4h16v16H4zM8 9h8M8 13h6'};
 const ic=n=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="${P[n]}"/></svg>`;
 
 /* ---------- utilità ---------- */
@@ -368,29 +392,59 @@ function sanitize(html){
   return document.importNode(r,true);
 }
 function setEditable(on){$$(EDIT,doc).forEach(e=>e.setAttribute('contenteditable',on?'true':'false'))}
-function newPage(after){const p=frag('<div class="page"><div class="content"></div></div>');p.append($('.pfoot',doc).cloneNode(true));after.after(p);return p}
+function newPage(after){const p=frag('<div class="page"><div class="content"></div></div>');p.append($('.pfoot',doc).cloneNode(true));after.after(p);reserve(p);return p}
+function nextPage(pg){return pg.nextElementSibling||newPage(pg)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+/* ---------- elementi liberi ---------- */
+function fls(p){return $$(':scope>.fl',p)}
+function ptk(p){return PW/p.getBoundingClientRect().width}
+function mxPt(){return parseFloat(cssv('--mx'))||42.5}
+// gli elementi liberi nella metà bassa della pagina riservano lo spazio sotto di sé: il testo non ci finisce sopra
+function reserve(p){const tops=fls(p).map(f=>parseFloat(f.style.top)).filter(t=>t>PH*.5);content(p).style.bottom=(tops.length?Math.max(50.9,PH-Math.min(...tops)+8):50.9).toFixed(1)+'pt'}
+function fixAnchors(){$$('.fl[data-b]',doc).forEach(f=>{const p=f.closest('.page');if(!p)return;const h=f.getBoundingClientRect().height*ptk(p);if(h>0){f.style.top=(parseFloat(f.dataset.b)-h).toFixed(1)+'pt';f.removeAttribute('data-b')}})}
+function autoLast(f){const ps=$$('.page',doc);f.classList.toggle('onlast',f.parentElement===ps[ps.length-1]&&parseFloat(f.style.top)>PH*.55)}
+// converte il vecchio blocco firma (versione precedente del sito) in elementi liberi, conservandone il testo
+function migrate(r){
+  const s=r.querySelector('.sign');if(!s)return r;
+  const pg=s.closest('.page'),g=s.querySelector('.gdpr'),sb=s.querySelector('.sigbox');
+  if(g){g.classList.add('ftx');const f=frag('<div class="fl onlast" data-k="ftext" data-b="791" style="left:42.5pt;top:771pt;width:377pt"></div>');f.append(g);pg.append(f)}
+  if(sb){const f=frag('<div class="fl onlast" data-k="fsig" data-b="789.1" style="left:434.3pt;top:757.8pt;width:118.5pt"></div>');f.append(sb);pg.append(f)}
+  s.remove();return r;
+}
 
 /* ---------- impaginazione ---------- */
 function paginate(){
   const s=getSelection();let keep=null;
   if(s.rangeCount&&doc.contains(s.anchorNode)){const r=s.getRangeAt(0);keep=[r.startContainer,r.startOffset,r.endContainer,r.endOffset,document.activeElement]}
-  const sign=$('.sign',doc);
-  if(sign){const pages=$$('.page',doc),lc=content(pages[pages.length-1]);if(lc.lastElementChild!==sign)lc.append(sign)}
+  fixAnchors();
   let moved=false;
-  for(let i=0;i<$$('.page',doc).length;i++){
-    const pg=$$('.page',doc)[i],c=content(pg);
-    const kids=blocks(c),k=kids.findIndex((b,j)=>j>0&&b.classList.contains('pb'));
-    if(k>0){const nc=content(pg.nextElementSibling||newPage(pg));nc.prepend(...kids.slice(k));moved=true}
-    while(over(c)&&blocks(c).length>1){const last=blocks(c).pop();content(pg.nextElementSibling||newPage(pg)).prepend(last);moved=true}
-    let np=pg.nextElementSibling;
-    while(np){
-      const nc=content(np),first=blocks(nc)[0];
-      if(!first){const x=np;np=np.nextElementSibling;x.remove();continue}
-      if(first.classList.contains('pb'))break;
-      c.append(first);
-      if(over(c)){nc.prepend(first);break}
-      moved=true;
+  for(let pass=0;pass<3;pass++){
+    let pages=$$('.page',doc),last=pages[pages.length-1];
+    $$('.fl.onlast',doc).forEach(f=>{if(f.parentElement!==last){last.append(f);moved=true}});
+    pages.forEach(reserve);
+    for(let i=0;i<$$('.page',doc).length;i++){
+      const pg=$$('.page',doc)[i],c=content(pg);
+      const kids=blocks(c),k=kids.findIndex((b,j)=>j>0&&b.classList.contains('pb'));
+      if(k>0){content(nextPage(pg)).prepend(...kids.slice(k));moved=true}
+      while(over(c)&&blocks(c).length>1){const lb=blocks(c).pop();content(nextPage(pg)).prepend(lb);moved=true}
+      let np=pg.nextElementSibling;
+      while(np){
+        const nc=content(np),first=blocks(nc)[0];
+        if(!first){if(fls(np).length)break;const x=np;np=np.nextElementSibling;x.remove();continue}
+        if(first.classList.contains('pb'))break;
+        c.append(first);
+        if(over(c)){nc.prepend(first);break}
+        moved=true;
+      }
     }
+    pages=$$('.page',doc);last=pages[pages.length-1];
+    if(pages.length>1&&!blocks(content(last)).length){
+      const fs=fls(last),prev=last.previousElementSibling;
+      if(!fs.length)last.remove();
+      else if(fs.every(f=>f.classList.contains('onlast'))){prev.append(...fs);reserve(prev);if(over(content(prev))){last.append(...fs);reserve(prev)}else{last.remove();moved=true}}
+    }
+    const L=$$('.page',doc).pop();if($$('.fl.onlast',doc).every(f=>f.parentElement===L))break;
   }
   if(moved&&keep){try{keep[4]&&keep[4].focus&&keep[4].focus({preventScroll:true});const r=document.createRange();r.setStart(keep[0],keep[1]);r.setEnd(keep[2],keep[3]);s.removeAllRanges();s.addRange(r)}catch(e){}}
 }
@@ -423,7 +477,13 @@ function renderB(){
   if(!curB||mode!=='edit'){bbar.hidden=true;hl.hidden=true;return}
   const k=curB.dataset.k;let t='Sezione',L=[];
   if(k==='head'){t='Intestazione';const ph=$('.photo',curB);L=[['photo',ph?'Cambia foto':'Aggiungi foto'],ph?['nophoto','Rimuovi foto']:null,['addfield','Aggiungi campo contatto','field'],'|',['up','Sposta su'],['down','Sposta giù'],['insert','Aggiungi sezione qui sotto'],'|',['del','Elimina intestazione','','dng']]}
-  else if(k==='sign'){t='Firma';L=[['sigimg','Carica immagine della firma','sig'],['sigorig','Ripristina firma originale','reset'],['signone','Togli la firma (lascia la riga)','nophoto'],'|',['insert','Aggiungi sezione sopra'],['del','Elimina blocco firma','','dng']]}
+  else if(curB.classList.contains('fl')){
+    const fr=curB.classList.contains('frame');t=k==='fsig'?'Firma':k==='fimg'?'Immagine':'Testo libero';
+    L=[k==='ftext'?['fframe',fr?'Togli riquadro':'Metti in riquadro','frame',fr?'on':'']:null,
+       ...(k==='fsig'?[['sigimg','Carica immagine della firma','sig'],['sigorig','Usa la firma originale','reset'],['signone','Togli la firma (lascia la riga)','nophoto']]:[]),
+       k==='fimg'?['fimgc','Cambia immagine','photo']:null,
+       '|',['fleft','Allinea al margine sinistro','alL'],['fcenter','Centra nella pagina','alC'],['fright','Allinea al margine destro','alR'],'|',['dup','Duplica'],['del','Elimina','','dng']];
+  }
   else{
     const add=$('.tbl',curB)?'Aggiungi riga':$('.projs',curB)?'Aggiungi attività':$('.lst',curB)?'Aggiungi punto':null;
     L=[['up','Sposta su'],['down','Sposta giù'],['pb',curB.classList.contains('pb')?'Non iniziare più su nuova pagina':'Inizia su una nuova pagina','',curB.classList.contains('pb')?'on':''],'|',add?['add',add]:null,['dup','Duplica sezione'],['insert','Aggiungi sezione qui sotto'],'|',['del','Elimina sezione','','dng']];
@@ -445,12 +505,15 @@ function renderI(){
 }
 function box(el,r,pad){el.style.left=r.left+scrollX-pad+'px';el.style.top=r.top+scrollY-pad+'px';el.style.width=r.width+pad*2+'px';el.style.height=r.height+pad*2+'px'}
 function place(){
-  if(mode!=='edit'){bbar.hidden=ibar.hidden=hl.hidden=hli.hidden=true;return}
+  if(mode!=='edit'){bbar.hidden=ibar.hidden=hl.hidden=hli.hidden=grip.hidden=rsz.hidden=true;return}
+  const isF=!!(curB&&curB.isConnected&&!bbar.hidden&&curB.classList.contains('fl'));
+  grip.hidden=rsz.hidden=!isF;
   if(curB&&curB.isConnected&&!bbar.hidden){
     const r=curB.getBoundingClientRect(),pr=curB.closest('.page').getBoundingClientRect();box(hl,r,5);
     const out=innerWidth-pr.right>58;bbar.classList.toggle('in',!out);
-    const x=out?pr.right+10:Math.max(4,r.right-bbar.offsetWidth),y=out?Math.max(r.top,$('.chrome').getBoundingClientRect().bottom+8):r.top-bbar.offsetHeight-6;
+    const x=out?pr.right+10:Math.max(4,r.right-bbar.offsetWidth),y=out?Math.max(r.top,$('.chrome').getBoundingClientRect().bottom+8):r.top-bbar.offsetHeight-6-(isF?32:0);
     bbar.style.left=x+scrollX+'px';bbar.style.top=y+scrollY+'px';
+    if(isF){grip.style.left=r.left-5+scrollX+'px';grip.style.top=r.top-5-26+scrollY+'px';rsz.style.left=r.right+5-7+scrollX+'px';rsz.style.top=r.top+r.height/2-14+scrollY+'px'}
   }
   if(curI&&curI.isConnected&&!ibar.hidden){
     const r=curI.getBoundingClientRect(),pr=curI.closest('.page').getBoundingClientRect();box(hli,r,2);
@@ -460,8 +523,8 @@ function place(){
   }
 }
 function target(t){
-  if(mode!=='edit'||!doc.contains(t))return;
-  const b=t.closest('.blk');if(b&&b!==curB){curB=ctxB=b;renderB()}
+  if(mode!=='edit'||drag||!doc.contains(t))return;
+  const b=t.closest('.blk,.fl');if(b&&b!==curB){curB=ctxB=b;renderB()}
   const it=t.closest('.itm,.tbl tr,.lst li'),cell=t.closest('td,th');
   if(it&&(it!==curI||cell!==curCell)){curI=it;curCell=cell;renderI()}
   else if(!it&&curI&&b&&!b.contains(curI)){curI=curCell=null;renderI()}
@@ -470,6 +533,54 @@ function target(t){
 zoomEl.addEventListener('mouseover',e=>target(e.target));
 zoomEl.addEventListener('focusin',e=>target(e.target));
 for(const el of [bbar,ibar,$('#ribbon')])el.addEventListener('mousedown',e=>{if(e.target.closest('button'))e.preventDefault()});
+
+/* ---------- trascinamento e larghezza degli elementi liberi ---------- */
+const grip=$('#grip'),rsz=$('#rsz'),guide=$('#guide');
+let drag=null;
+function pageAt(y){return $$('.page',doc).find(p=>{const r=p.getBoundingClientRect();return y>=r.top&&y<=r.bottom})}
+function startDrag(e,m){
+  if(!curB||!curB.classList.contains('fl'))return;e.preventDefault();flush();
+  try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}
+  const f=curB,k=ptk(f.parentElement),r=f.getBoundingClientRect();
+  drag={f,m,ox:(e.clientX-r.left)*k,oy:(e.clientY-r.top)*k,sx:e.clientX,w0:r.width*k};document.body.classList.add('dragging');
+}
+function moveDrag(e){
+  if(!drag)return;const f=drag.f;
+  if(drag.m==='move'){
+    const pg=pageAt(e.clientY)||f.parentElement;if(pg!==f.parentElement)pg.append(f);
+    const pr=pg.getBoundingClientRect(),k=PW/pr.width,fr=f.getBoundingClientRect(),fw=fr.width*k,fh=fr.height*k,mx=mxPt();
+    let x=(e.clientX-pr.left)*k-drag.ox,y=(e.clientY-pr.top)*k-drag.oy,gx=null;
+    for(const [c,g] of [[mx,mx],[(PW-fw)/2,PW/2],[PW-mx-fw,PW-mx]])if(Math.abs(x-c)<5){x=c;gx=g;break}
+    x=Math.max(0,Math.min(PW-fw,x));y=Math.max(0,Math.min(PH-fh,y));
+    f.style.left=x.toFixed(1)+'pt';f.style.top=y.toFixed(1)+'pt';
+    guide.hidden=gx==null;if(gx!=null){guide.style.left=pr.left+scrollX+gx/k+'px';guide.style.top=pr.top+scrollY+'px';guide.style.height=pr.height+'px'}
+  }else{
+    const k=ptk(f.parentElement),x=parseFloat(f.style.left)||0;
+    f.style.width=Math.max(30,Math.min(PW-x,drag.w0+(e.clientX-drag.sx)*k)).toFixed(1)+'pt';
+  }
+  place();
+}
+function endDrag(){if(!drag)return;const f=drag.f;drag=null;document.body.classList.remove('dragging');guide.hidden=true;autoLast(f);curB=ctxB=f;commit()}
+for(const [el,m] of [[grip,'move'],[rsz,'w']]){el.addEventListener('pointerdown',e=>startDrag(e,m));el.addEventListener('pointermove',moveDrag);el.addEventListener('pointerup',endDrag);el.addEventListener('pointercancel',endDrag)}
+
+function visPage(){const mid=innerHeight/2;let best=null,bd=1e9;for(const p of $$('.page',doc)){const r=p.getBoundingClientRect(),d=r.top<=mid&&r.bottom>=mid?0:Math.min(Math.abs(r.top-mid),Math.abs(r.bottom-mid));if(d<bd){bd=d;best=p}}return best}
+function viewY(p,h){const r=p.getBoundingClientRect(),k=PW/r.width;return Math.max(40,Math.min(PH-70-h,(innerHeight/2-r.top)*k-h/2))}
+function addFloat(t,img){
+  const ps=$$('.page',doc),last=ps[ps.length-1],mx=mxPt();let f,pg,x,y;
+  if(t==='text'){pg=visPage();f=frag('<div class="fl" data-k="ftext" style="width:200pt"><div class="ftx">Scrivi qui il testo</div></div>');x=(PW-200)/2;y=viewY(pg,20)}
+  if(t==='date'){
+    pg=last;const fld=$$('.field',doc).find(e=>/^\s*domicilio/i.test(e.textContent));
+    const city=fld?fld.textContent.replace(/^\s*domicilio\s*:?\s*/i,'').replace(/\s*\([^)]*\)\s*$/,'').trim():'Luogo';
+    const day=new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric'});
+    f=frag(`<div class="fl" data-k="ftext" style="width:200pt"><div class="ftx">${esc((city||'Luogo')+', '+day)}</div></div>`);
+    const g=fls(pg).find(e=>$('.gdpr',e));x=mx;y=g?parseFloat(g.style.top)-22:PH-130;
+  }
+  if(t==='sign'){pg=last;f=frag(`<div class="fl" data-k="fsig" style="width:118.5pt"><div class="sigbox"><div class="sig">${SIG}</div><div class="flabel">Firma</div></div></div>`);x=PW-mx-118.5;const ex=fls(pg).filter(e=>e.dataset.k==='fsig');y=ex.length?Math.max(40,Math.min(...ex.map(e=>parseFloat(e.style.top)))-48):757.8}
+  if(t==='img'){pg=visPage();f=frag('<div class="fl" data-k="fimg" style="width:120pt"><img alt="Immagine"></div>');$('img',f).src=img;x=(PW-120)/2;y=viewY(pg,90)}
+  f.style.left=x.toFixed(1)+'pt';f.style.top=Math.max(0,y).toFixed(1)+'pt';pg.append(f);autoLast(f);curB=ctxB=f;
+  return f;
+}
+function alignF(where){const f=curB,k=ptk(f.parentElement),fw=f.getBoundingClientRect().width*k,mx=mxPt();f.style.left=(where<0?mx:where>0?PW-mx-fw:(PW-fw)/2).toFixed(1)+'pt'}
 
 /* ---------- operazioni sui blocchi ---------- */
 function moveBlk(b,d){
@@ -600,9 +711,103 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closePop()});
 
 /* ---------- azioni ---------- */
-function download(name,text,type){try{const u=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}catch(e){toast('Il browser ha bloccato il download')}}
+function download(name,text,type){try{const u=URL.createObjectURL(text instanceof Blob?text:new Blob([text],{type}));const a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}catch(e){toast('Il browser ha bloccato il download')}}
 function setMode(m){mode=m;document.body.classList.toggle('preview',m==='preview');$('#bPrev').setAttribute('aria-pressed',m==='preview');$('#bPrev .lbl').textContent=m==='preview'?'Modifica':'Anteprima';setEditable(m==='edit');if(m==='preview'){curB=curI=curCell=null}renderB();renderI();place()}
-function pdf(){
+/* ---------- PDF scaricato direttamente: testo vero, font Roboto incorporato ---------- */
+const ASC=1900/2048,DESC=500/2048;let pdfLib=null,fontB64=null,busy=false;
+function loadScript(src){return new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=ko;document.head.append(s)})}
+async function b64(url){const buf=new Uint8Array(await (await fetch(url)).arrayBuffer());let s='';for(let i=0;i<buf.length;i+=32768)s+=String.fromCharCode.apply(null,buf.subarray(i,i+32768));return btoa(s)}
+async function pdfReady(){
+  if(!pdfLib){await loadScript('lib/jspdf.umd.min.js');pdfLib=window.jspdf.jsPDF}
+  if(!fontB64){const v=['Regular','Bold','Italic','BoldItalic'];const d=await Promise.all(v.map(x=>b64(`fonts/Roboto-${x}.ttf`)));fontB64={normal:d[0],bold:d[1],italic:d[2],bolditalic:d[3]}}
+}
+function rgba(c){const m=(c||'').match(/rgba?\(([^)]+)\)/);if(!m)return null;const p=m[1].split(/[\s,\/]+/).filter(Boolean).map(Number);return {r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1}}
+function imgEl(src){return new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=ko;i.src=src})}
+async function rasterSvg(svg,wPt,hPt){
+  const s=svg.cloneNode(true);s.setAttribute('xmlns','http://www.w3.org/2000/svg');s.setAttribute('width',wPt*8);s.setAttribute('height',hPt*8);
+  const im=await imgEl('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s.outerHTML));
+  const cv=document.createElement('canvas');cv.width=Math.ceil(wPt*8);cv.height=Math.ceil(hPt*8);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);return cv.toDataURL('image/png');
+}
+async function coverImg(img,wPt,hPt){
+  const W=Math.ceil(wPt*4),H=Math.ceil(hPt*4),cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const nw=img.naturalWidth,nh=img.naturalHeight,s=Math.max(W/nw,H/nh);cv.getContext('2d').drawImage(img,(W-nw*s)/2,(H-nh*s)/2,nw*s,nh*s);return cv.toDataURL('image/jpeg',.92);
+}
+async function paintPage(P,page){
+  const pr=page.getBoundingClientRect(),k=PW/pr.width,X=x=>(x-pr.left)*k,Y=y=>(y-pr.top)*k;
+  const fill=(c,x,y,w,h)=>{if(!c||c.a===0||w<=0||h<=0)return;if(c.a<1)P.setGState(new P.GState({opacity:c.a}));P.setFillColor(c.r,c.g,c.b);P.rect(x,y,w,h,'F');if(c.a<1)P.setGState(new P.GState({opacity:1}))};
+  const tw=document.createTreeWalker(page,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{acceptNode:n=>{
+    const e=n.nodeType===1?n:n.parentElement;
+    if(e.closest('.ui'))return NodeFilter.FILTER_REJECT;
+    if(n.nodeType===1&&n.closest('svg')&&n.tagName.toLowerCase()!=='svg')return NodeFilter.FILTER_REJECT;
+    if(n.nodeType===1){const cs=getComputedStyle(n);if(cs.display==='none'||cs.visibility==='hidden')return NodeFilter.FILTER_REJECT}
+    return NodeFilter.FILTER_ACCEPT}});
+  const rg=document.createRange();let n;
+  while(n=tw.nextNode()){
+    if(n.nodeType===1){
+      const el=n,cs=getComputedStyle(el),r=el.getBoundingClientRect(),tag=el.tagName.toLowerCase();
+      if(r.bottom<pr.top||r.top>pr.bottom)continue;
+      const bg=rgba(cs.backgroundColor);
+      if(bg&&bg.a>0){const rs=cs.display==='inline'?[...el.getClientRects()]:[r];rs.forEach(q=>fill(bg,X(q.left),Y(q.top),q.width*k,q.height*k))}
+      for(const sd of ['Top','Right','Bottom','Left']){
+        const w=parseFloat(cs[`border${sd}Width`]);if(!w||cs[`border${sd}Style`]==='none')continue;
+        const c=rgba(cs[`border${sd}Color`]),wp=w*k;
+        if(sd==='Top')fill(c,X(r.left),Y(r.top),r.width*k,wp);
+        if(sd==='Bottom')fill(c,X(r.left),Y(r.bottom)-wp,r.width*k,wp);
+        if(sd==='Left')fill(c,X(r.left),Y(r.top),wp,r.height*k);
+        if(sd==='Right')fill(c,X(r.right)-wp,Y(r.top),wp,r.height*k);
+      }
+      if(tag==='img'&&el.complete&&el.naturalWidth){
+        const w=r.width*k,h=r.height*k;let src=el.src,fmt=/^data:image\/png/i.test(src)?'PNG':'JPEG';
+        if(cs.objectFit==='cover'||!/^data:image\/(png|jpe?g)/i.test(src)){src=await coverImg(el,w,h);fmt='JPEG'}
+        P.addImage(src,fmt,X(r.left),Y(r.top),w,h,undefined,'FAST');
+      }
+      if(tag==='svg'&&r.width){try{P.addImage(await rasterSvg(el,r.width*k,r.height*k),'PNG',X(r.left),Y(r.top),r.width*k,r.height*k,undefined,'FAST')}catch(e){}}
+      if(tag==='li'){
+        rg.selectNodeContents(el);const q=rg.getClientRects()[0];if(!q)continue;
+        const fs=parseFloat(cs.fontSize),base=Y(q.top+(q.height-(ASC+DESC)*fs)/2+ASC*fs),c=rgba(cs.color)||{r:30,g:41,b:59},pt=fs*.75;
+        P.setFillColor(c.r,c.g,c.b);P.setTextColor(c.r,c.g,c.b);
+        if(cs.listStyleType==='decimal'){P.setFont('Roboto','normal');P.setFontSize(pt);P.text([...el.parentElement.children].indexOf(el)+1+'.',X(r.left)-3,base,{align:'right'})}
+        else if(cs.listStyleType!=='none')P.circle(X(r.left)-pt*.65,base-pt*.32,pt*.16,'F');
+      }
+      continue;
+    }
+    const t=n.data;if(!t.trim())continue;
+    const el=n.parentElement,cs=getComputedStyle(el),fs=parseFloat(cs.fontSize),pt=fs*.75,c=rgba(cs.color)||{r:0,g:0,b:0};
+    const bold=parseInt(cs.fontWeight)>=600,ital=cs.fontStyle==='italic';
+    P.setFont('Roboto',bold?(ital?'bolditalic':'bold'):(ital?'italic':'normal'));P.setFontSize(pt);P.setTextColor(c.r,c.g,c.b);
+    const cps=parseFloat(cs.letterSpacing)||0,up=cs.textTransform==='uppercase';
+    const und=!!el.closest('u,a')||/underline/.test(cs.textDecorationLine),strk=!!el.closest('s,strike,del')||/line-through/.test(cs.textDecorationLine);
+    const re=/\S+/g;let m;
+    while(m=re.exec(t)){
+      rg.setStart(n,m.index);rg.setEnd(n,m.index+m[0].length);const q=rg.getClientRects()[0];
+      if(!q||q.top>pr.bottom||q.bottom<pr.top)continue;
+      const base=Y(q.top+(q.height-(ASC+DESC)*fs)/2+ASC*fs),x=X(q.left);
+      let wd=up?m[0].toUpperCase():m[0];
+      // spaziatura calcolata perché la parola occupi esattamente la larghezza che ha nel browser
+      const nat=P.getTextWidth(wd),chars=[...wd].length,sp=chars?(q.width*k-nat)/chars:cps*k;
+      if(/\s/.test(t[m.index+m[0].length]||''))wd+=' ';
+      P.text(wd,x,base,{charSpace:sp,baseline:'alphabetic'});
+      if(und||strk){P.setDrawColor(c.r,c.g,c.b);P.setLineWidth(pt*.06);const yy=und?base+pt*.12:base-pt*.3;P.line(x,yy,x+q.width*k,yy)}
+    }
+  }
+}
+async function pdf(){
+  if(busy)return;busy=true;flush();closePop();const prev=mode;
+  try{
+    toast('Preparo il PDF…');await pdfReady();
+    if(prev==='edit')setMode('preview');refresh();await document.fonts.ready;
+    const P=new pdfLib({unit:'pt',format:'a4',compress:true});
+    for(const [s,d] of Object.entries(fontB64)){const f=`Roboto-${s}.ttf`;P.addFileToVFS(f,d);P.addFont(f,'Roboto',s)}
+    const pages=$$('.page',doc);
+    for(let i=0;i<pages.length;i++){if(i)P.addPage('a4');await paintPage(P,pages[i])}
+    const n=($('h1',doc)?.innerText||'').trim().toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
+    P.setProperties({title:'Curriculum Vitae '+n,author:n,creator:'CV editor'});
+    download('CV-'+(n.replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'')||'documento')+'.pdf',P.output('blob'),'application/pdf');
+    toast('PDF scaricato');
+  }catch(e){console.error(e);toast('Non riesco a creare il PDF qui: si apre la stampa, scegli “Salva come PDF”');setTimeout(printPDF,900)}
+  finally{if(prev==='edit')setMode('edit');busy=false}
+}
+function printPDF(){
   flush();closePop();const prev=mode;if(prev==='edit')setMode('preview');
   const t=document.title,n=($('h1',doc)?.innerText||'').trim().toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
   document.title='CV '+(n||'');
@@ -618,6 +823,7 @@ document.addEventListener('click',async e=>{
     case 'undo':undo();break;case 'redo':redo();break;
     case 'preview':setMode(mode==='edit'?'preview':'edit');break;
     case 'pdf':pdf();break;
+    case 'print':printPDF();break;
     case 'tipx':$('#tip').remove();store.set(TIPK,'1');break;
     case 'fsUp':fontStep(.5);break;case 'fsDown':fontStep(-.5);break;
     case 'clear':if(restoreSel()){document.execCommand('removeFormat');document.execCommand('unlink')}break;
@@ -627,7 +833,18 @@ document.addEventListener('click',async e=>{
     case 'insert':ctxB=curB;showPop('addp',b);break;
     case 'up':op(()=>moveBlk(curB,-1));break;case 'down':op(()=>moveBlk(curB,1));break;
     case 'pb':op(()=>curB.classList.toggle('pb'));break;
-    case 'dup':op(()=>{const c=curB.cloneNode(true);c.classList.remove('pb');curB.after(c);curB=ctxB=c});break;
+    case 'dup':op(()=>{const c=curB.cloneNode(true);c.classList.remove('pb');
+      if(c.classList.contains('fl')){c.classList.remove('onlast');c.style.left=Math.min(PW-40,(parseFloat(c.style.left)||0)+12).toFixed(1)+'pt';c.style.top=Math.max(0,(parseFloat(c.style.top)||0)-30).toFixed(1)+'pt';curB.parentElement.append(c)}else curB.after(c);
+      curB=ctxB=c});break;
+    case 'addfl':{const t=b.dataset.t;
+      if(t==='img'){pickImage(900,u=>{op(()=>addFloat('img',u))});break}
+      let f;op(()=>{f=addFloat(t)});
+      f.scrollIntoView({block:'center',behavior:'smooth'});const tx=$('.ftx',f);if(tx){tx.focus();const r=document.createRange();r.selectNodeContents(tx);const se=getSelection();se.removeAllRanges();se.addRange(r)}
+      toast('Trascinalo dalla linguetta blu “Sposta”');break}
+    case 'fleft':op(()=>alignF(-1));break;case 'fcenter':op(()=>alignF(0));break;case 'fright':op(()=>alignF(1));break;
+    case 'fframe':op(()=>curB.classList.toggle('frame'));break;
+    case 'fimgc':{const f=curB;pickImage(900,u=>op(()=>{$('img',f).src=u}));break}
+    case 'restorebak':{let el=null;try{el=sanitize(JSON.parse(store.get(BAK)).html)}catch(e){}if(!el){toast('Nessuna copia di sicurezza disponibile');break}const ok=await ask('Recuperare la copia di sicurezza?','Il CV tornerà com’era prima dell’aggiornamento del sito. Potrai tornare indietro con Annulla (Ctrl+Z).',null,'Recupera');if(ok){op(()=>mount(migrate(el)));toast('Copia di sicurezza recuperata')}break}
     case 'del':op(()=>{curB.remove();curB=null});toast('Eliminato — Ctrl+Z per annullare');break;
     case 'add':op(()=>addItem(curB));break;
     case 'photo':{const h=curB;pickImage(700,u=>op(()=>{let p=$('.photo',h);if(!p){p=frag('<div class="photo"><img alt="Foto"></div>');$('.contacts',h).after(p)}$('img',p).src=u}));break}
@@ -641,7 +858,7 @@ document.addEventListener('click',async e=>{
     case 'accent':setVar('--a',b.dataset.c);break;
     case 'styleReset':op(()=>{['--a','--ff','--fs','--lh','--sg','--mx'].forEach(k=>doc.style.removeProperty(k));syncStyle()});break;
     case 'savejson':flush();download('CV-Carmen-Vicidomini-modificabile.json',JSON.stringify({app:'cv-editor',v:1,saved:new Date().toISOString(),html:clean()}),'application/json');toast('Copia salvata: riaprila con File → Apri copia salvata');break;
-    case 'openjson':{const fi=$('#fileIn');fi.accept='.json,application/json';fi.value='';fi.onchange=()=>{const f=fi.files[0];if(!f)return;f.text().then(tx=>{let el=null;try{el=sanitize(JSON.parse(tx).html)}catch(e){}if(!el){toast('File non valido: scegli una copia salvata da questo editor');return}op(()=>mount(el));toast('Copia aperta')})};fi.click();break}
+    case 'openjson':{const fi=$('#fileIn');fi.accept='.json,application/json';fi.value='';fi.onchange=()=>{const f=fi.files[0];if(!f)return;f.text().then(tx=>{let el=null;try{el=sanitize(JSON.parse(tx).html)}catch(e){}if(!el){toast('File non valido: scegli una copia salvata da questo editor');return}op(()=>mount(migrate(el)));toast('Copia aperta')})};fi.click();break}
     case 'reset':{const ok=await ask('Ripristinare il CV originale?','Tutte le modifiche verranno sostituite dal CV originale. Potrai tornare indietro con Annulla (Ctrl+Z).',null,'Ripristina');if(ok)op(()=>mount(frag(ORIG).cloneNode(true)));break}
   }
 });
@@ -661,7 +878,7 @@ document.addEventListener('keydown',e=>{
   if(k==='z'&&!e.shiftKey){e.preventDefault();undo()}
   else if(k==='y'||(k==='z'&&e.shiftKey)){e.preventDefault();redo()}
   else if(k==='s'){e.preventDefault();flush();save();toast('Salvato in questo browser')}
-  else if(k==='p'){e.preventDefault();pdf()}
+  else if(k==='p'){e.preventDefault();printPDF()}
 });
 
 /* ---------- adattamento alla finestra ---------- */
@@ -671,7 +888,12 @@ new ResizeObserver(()=>place()).observe(zoomEl);
 
 /* ---------- avvio ---------- */
 const saved=store.get(KEY);
-if(saved){try{const el=sanitize(JSON.parse(saved).html);if(el){doc.replaceWith(el);doc=el;setTimeout(()=>toast('Sono state ripristinate le tue ultime modifiche'),600)}}catch(e){}}
+if(saved){
+  // copia di sicurezza del salvataggio fatto con la versione precedente del sito, prima di convertirlo
+  if(!store.get(BAK))store.set(BAK,saved);
+  try{const el=sanitize(JSON.parse(saved).html);if(el){migrate(el);doc.replaceWith(el);doc=el;setTimeout(()=>toast('Sono state ripristinate le tue ultime modifiche'),600)}}catch(e){}
+}
+if(store.get(BAK))$('#bBak').hidden=false;
 if(store.get(TIPK))$('#tip').remove();
 document.execCommand('defaultParagraphSeparator',false,'div');
 setEditable(true);loadFont(cssv('--ff'));syncStyle();fit();refresh();snapshot();ubtn();
