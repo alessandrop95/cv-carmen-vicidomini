@@ -5,9 +5,38 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>CV Carmen Vicidomini</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<!-- caratteri inclusi nel sito: gli stessi file servono allo schermo (woff2) e al PDF (ttf), così coincidono -->
+<style>
+@font-face{font-family:'Roboto';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/Roboto-Regular.woff2) format('woff2')}
+@font-face{font-family:'Roboto';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/Roboto-Bold.woff2) format('woff2')}
+@font-face{font-family:'Roboto';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Roboto-Italic.woff2) format('woff2')}
+@font-face{font-family:'Roboto';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Roboto-BoldItalic.woff2) format('woff2')}
+@font-face{font-family:'Roboto';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/Roboto-Medium.woff2) format('woff2')}
+@font-face{font-family:'Open Sans';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/OpenSans-Regular.woff2) format('woff2')}
+@font-face{font-family:'Open Sans';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/OpenSans-Bold.woff2) format('woff2')}
+@font-face{font-family:'Open Sans';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/OpenSans-Italic.woff2) format('woff2')}
+@font-face{font-family:'Open Sans';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/OpenSans-BoldItalic.woff2) format('woff2')}
+@font-face{font-family:'Lato';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/Lato-Regular.woff2) format('woff2')}
+@font-face{font-family:'Lato';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/Lato-Bold.woff2) format('woff2')}
+@font-face{font-family:'Lato';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Lato-Italic.woff2) format('woff2')}
+@font-face{font-family:'Lato';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Lato-BoldItalic.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/SourceSans3-Regular.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/SourceSans3-Bold.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/SourceSans3-Italic.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/SourceSans3-BoldItalic.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/Inter-Regular.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/Inter-Bold.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Inter-Italic.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Inter-BoldItalic.woff2) format('woff2')}
+@font-face{font-family:'Merriweather';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/Merriweather-Regular.woff2) format('woff2')}
+@font-face{font-family:'Merriweather';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/Merriweather-Bold.woff2) format('woff2')}
+@font-face{font-family:'Merriweather';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Merriweather-Italic.woff2) format('woff2')}
+@font-face{font-family:'Merriweather';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Merriweather-BoldItalic.woff2) format('woff2')}
+@font-face{font-family:'Lora';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/Lora-Regular.woff2) format('woff2')}
+@font-face{font-family:'Lora';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/Lora-Bold.woff2) format('woff2')}
+@font-face{font-family:'Lora';font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Lora-Italic.woff2) format('woff2')}
+@font-face{font-family:'Lora';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Lora-BoldItalic.woff2) format('woff2')}
+</style>
 <style>
 /* VOICE: sobrio, da studio professionale: lo strumento sparisce, il CV è protagonista.
    IDEA: un foglio A4 su una scrivania, con un editor come quello di un elaboratore di testi.
@@ -679,8 +708,8 @@ function ask(title,text,input,okLabel){return new Promise(res=>{const d=$('#dlg'
 
 /* ---------- stile ---------- */
 const SW=[['#1e3a5f','Blu notte (originale)'],['#1d4ed8','Blu'],['#0f5e66','Petrolio'],['#166534','Verde'],['#7f1d1d','Bordeaux'],['#5b2a5e','Prugna'],['#334155','Ardesia'],['#111827','Nero']];
-const FONTS={'Open Sans':'Open+Sans','Lato':'Lato','Source Sans 3':'Source+Sans+3','Inter':'Inter','Merriweather':'Merriweather','Lora':'Lora'};
-function loadFont(n){n=(n||'').replace(/["']/g,'');if(!FONTS[n]||$(`link[data-f="${n}"]`))return;const l=document.createElement('link');l.rel='stylesheet';l.dataset.f=n;l.href=`https://fonts.googleapis.com/css2?family=${FONTS[n]}:ital,wght@0,400;0,700;1,400;1,700&display=swap`;l.onload=()=>document.fonts.ready.then(()=>{paginate();refresh();place()});document.head.append(l)}
+const FONTS={'Roboto':'Roboto','Open Sans':'OpenSans','Lato':'Lato','Source Sans 3':'SourceSans3','Inter':'Inter','Merriweather':'Merriweather','Lora':'Lora'};
+function loadFont(n){n=(n||'').replace(/["']/g,'')||'Roboto';if(!FONTS[n])return;Promise.all(['400 12px','700 12px','italic 400 12px','italic 700 12px'].map(s=>document.fonts.load(`${s} "${n}"`))).catch(()=>{}).then(()=>{paginate();refresh();place()})}
 function cssv(k){return doc.style.getPropertyValue(k).trim()}
 function syncStyle(){
   const a=cssv('--a')||'#1e3a5f';$('#sws').innerHTML=SW.map(s=>`<button type="button" data-act="accent" data-c="${s[0]}" style="background:${s[0]}" aria-label="${s[1]}" title="${s[1]}" aria-pressed="${s[0]===a}"></button>`).join('')+`<input type="color" id="sAc" value="${a}" aria-label="Colore personalizzato" title="Colore personalizzato">`;
@@ -713,13 +742,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closePop()});
 /* ---------- azioni ---------- */
 function download(name,text,type){try{const u=URL.createObjectURL(text instanceof Blob?text:new Blob([text],{type}));const a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}catch(e){toast('Il browser ha bloccato il download')}}
 function setMode(m){mode=m;document.body.classList.toggle('preview',m==='preview');$('#bPrev').setAttribute('aria-pressed',m==='preview');$('#bPrev .lbl').textContent=m==='preview'?'Modifica':'Anteprima';setEditable(m==='edit');if(m==='preview'){curB=curI=curCell=null}renderB();renderI();place()}
-/* ---------- PDF scaricato direttamente: testo vero, font Roboto incorporato ---------- */
-const ASC=1900/2048,DESC=500/2048;let pdfLib=null,fontB64=null,busy=false;
+/* ---------- PDF scaricato direttamente: testo vero, con gli stessi caratteri mostrati a schermo ---------- */
+const VAR={normal:'Regular',bold:'Bold',italic:'Italic',bolditalic:'BoldItalic'};let pdfLib=null,busy=false;const fontB64={};
 function loadScript(src){return new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=ko;document.head.append(s)})}
-async function b64(url){const buf=new Uint8Array(await (await fetch(url)).arrayBuffer());let s='';for(let i=0;i<buf.length;i+=32768)s+=String.fromCharCode.apply(null,buf.subarray(i,i+32768));return btoa(s)}
-async function pdfReady(){
+async function b64(url){const r=await fetch(url);if(!r.ok)throw new Error(url);const buf=new Uint8Array(await r.arrayBuffer());let s='';for(let i=0;i<buf.length;i+=32768)s+=String.fromCharCode.apply(null,buf.subarray(i,i+32768));return btoa(s)}
+function famOf(cs){const f=cs.fontFamily.split(',')[0].trim().replace(/["']/g,'');return FONTS[f]?f:'Roboto'}
+async function pdfReady(fams){
   if(!pdfLib){await loadScript('lib/jspdf.umd.min.js');pdfLib=window.jspdf.jsPDF}
-  if(!fontB64){const v=['Regular','Bold','Italic','BoldItalic'];const d=await Promise.all(v.map(x=>b64(`fonts/Roboto-${x}.ttf`)));fontB64={normal:d[0],bold:d[1],italic:d[2],bolditalic:d[3]}}
+  await Promise.all([...fams].flatMap(f=>Object.values(VAR).map(async v=>{const k=FONTS[f]+'-'+v;if(!fontB64[k])fontB64[k]=await b64(`fonts/${k}.ttf`)})));
 }
 function rgba(c){const m=(c||'').match(/rgba?\(([^)]+)\)/);if(!m)return null;const p=m[1].split(/[\s,\/]+/).filter(Boolean).map(Number);return {r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1}}
 function imgEl(src){return new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=ko;i.src=src})}
@@ -728,78 +758,119 @@ async function rasterSvg(svg,wPt,hPt){
   const im=await imgEl('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s.outerHTML));
   const cv=document.createElement('canvas');cv.width=Math.ceil(wPt*8);cv.height=Math.ceil(hPt*8);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);return cv.toDataURL('image/png');
 }
-async function coverImg(img,wPt,hPt){
-  const W=Math.ceil(wPt*4),H=Math.ceil(hPt*4),cv=document.createElement('canvas');cv.width=W;cv.height=H;
-  const nw=img.naturalWidth,nh=img.naturalHeight,s=Math.max(W/nw,H/nh);cv.getContext('2d').drawImage(img,(W-nw*s)/2,(H-nh*s)/2,nw*s,nh*s);return cv.toDataURL('image/jpeg',.92);
+async function fitImg(img,wPt,hPt,fit){
+  const W=Math.ceil(wPt*4),H=Math.ceil(hPt*4),cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+  const nw=img.naturalWidth,nh=img.naturalHeight,s=fit==='contain'?Math.min(W/nw,H/nh):fit==='cover'?Math.max(W/nw,H/nh):0;
+  if(s)g.drawImage(img,(W-nw*s)/2,(H-nh*s)/2,nw*s,nh*s);else g.drawImage(img,0,0,W,H);return cv.toDataURL('image/png');
+}
+/* distanza (px a schermo) tra il bordo alto del riquadro di una riga di testo e la sua linea di base, misurata dal browser */
+const baseCache=new Map();
+function baseOff(cs,host){
+  const key=[cs.fontStyle,cs.fontWeight,cs.fontSize,cs.fontFamily].join('|');if(baseCache.has(key))return baseCache.get(key);
+  const s=document.createElement('span');s.style.cssText=`position:absolute;left:0;top:0;visibility:hidden;white-space:nowrap;line-height:normal;letter-spacing:0;font-style:${cs.fontStyle};font-weight:${cs.fontWeight};font-size:${cs.fontSize};font-family:${cs.fontFamily}`;
+  s.innerHTML='Hg<span style="display:inline-block;width:0;height:0;vertical-align:baseline"></span>';host.append(s);
+  const rg=document.createRange();rg.selectNodeContents(s.firstChild);const v=s.lastChild.getBoundingClientRect().top-rg.getBoundingClientRect().top;s.remove();baseCache.set(key,v);return v;
 }
 async function paintPage(P,page){
+  baseCache.clear();
   const pr=page.getBoundingClientRect(),k=PW/pr.width,X=x=>(x-pr.left)*k,Y=y=>(y-pr.top)*k;
-  const fill=(c,x,y,w,h)=>{if(!c||c.a===0||w<=0||h<=0)return;if(c.a<1)P.setGState(new P.GState({opacity:c.a}));P.setFillColor(c.r,c.g,c.b);P.rect(x,y,w,h,'F');if(c.a<1)P.setGState(new P.GState({opacity:1}))};
+  const alpha=a=>P.setGState(new P.GState({opacity:a}));
+  const fill=(c,x,y,w,h,rad)=>{if(!c||c.a===0||w<=0||h<=0)return;if(c.a<1)alpha(c.a);P.setFillColor(c.r,c.g,c.b);if(rad>0){const q=Math.min(rad,w/2,h/2);P.roundedRect(x,y,w,h,q,q,'F')}else P.rect(x,y,w,h,'F');if(c.a<1)alpha(1)};
+  const setFont=cs=>{const b=parseInt(cs.fontWeight)>=600,i=cs.fontStyle!=='normal';P.setFont(famOf(cs),b?(i?'bolditalic':'bold'):(i?'italic':'normal'));P.setFontSize(parseFloat(cs.fontSize)*.75)};
+  const has=ch=>{const c=ch.codePointAt(0);if(c>0xffff)return false;if(c<33)return true;const m=P.getFont().metadata;return !m||!m.characterToGlyph||!!m.characterToGlyph(c)};
+  // testo come immagine, per i simboli che il carattere non contiene (il browser li prende da un altro carattere)
+  const rasterText=(txt,cs,q,off)=>{const R=8,w=q.width*k,h=q.height*k,cv=document.createElement('canvas');cv.width=Math.ceil(w*R)+2;cv.height=Math.ceil(h*R)+2;const g=cv.getContext('2d');
+    g.scale(R,R);g.font=`${cs.fontStyle} ${cs.fontWeight} ${parseFloat(cs.fontSize)*.75}px ${cs.fontFamily}`;g.fillStyle=cs.color;g.textBaseline='alphabetic';g.fillText(txt,0,off*k);
+    P.addImage(cv.toDataURL('image/png'),'PNG',X(q.left),Y(q.top),cv.width/R,cv.height/R,undefined,'FAST')};
   const tw=document.createTreeWalker(page,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{acceptNode:n=>{
     const e=n.nodeType===1?n:n.parentElement;
     if(e.closest('.ui'))return NodeFilter.FILTER_REJECT;
     if(n.nodeType===1&&n.closest('svg')&&n.tagName.toLowerCase()!=='svg')return NodeFilter.FILTER_REJECT;
-    if(n.nodeType===1){const cs=getComputedStyle(n);if(cs.display==='none'||cs.visibility==='hidden')return NodeFilter.FILTER_REJECT}
+    if(n.nodeType===1){const cs=getComputedStyle(n);if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity)===0)return NodeFilter.FILTER_REJECT}
     return NodeFilter.FILTER_ACCEPT}});
   const rg=document.createRange();let n;
   while(n=tw.nextNode()){
     if(n.nodeType===1){
       const el=n,cs=getComputedStyle(el),r=el.getBoundingClientRect(),tag=el.tagName.toLowerCase();
-      if(r.bottom<pr.top||r.top>pr.bottom)continue;
-      const bg=rgba(cs.backgroundColor);
-      if(bg&&bg.a>0){const rs=cs.display==='inline'?[...el.getClientRects()]:[r];rs.forEach(q=>fill(bg,X(q.left),Y(q.top),q.width*k,q.height*k))}
-      for(const sd of ['Top','Right','Bottom','Left']){
-        const w=parseFloat(cs[`border${sd}Width`]);if(!w||cs[`border${sd}Style`]==='none')continue;
-        const c=rgba(cs[`border${sd}Color`]),wp=w*k;
+      if(r.bottom<pr.top||r.top>pr.bottom||r.right<pr.left||r.left>pr.right)continue;
+      const rad=(parseFloat(cs.borderTopLeftRadius)||0)*k,bg=rgba(cs.backgroundColor);
+      if(bg&&bg.a>0){const rs=cs.display==='inline'?[...el.getClientRects()]:[r];rs.forEach(q=>fill(bg,X(q.left),Y(q.top),q.width*k,q.height*k,rad))}
+      const bw=['Top','Right','Bottom','Left'].map(sd=>cs[`border${sd}Style`]==='none'||cs[`border${sd}Style`]==='hidden'?0:parseFloat(cs[`border${sd}Width`])||0);
+      if(rad>0&&bw.every(w=>w===bw[0]&&w>0)&&cs.borderTopColor===cs.borderLeftColor){
+        const c=rgba(cs.borderTopColor),wp=bw[0]*k;if(c&&c.a>0){if(c.a<1)alpha(c.a);P.setDrawColor(c.r,c.g,c.b);P.setLineWidth(wp);const q=Math.max(0,rad-wp/2);P.roundedRect(X(r.left)+wp/2,Y(r.top)+wp/2,r.width*k-wp,r.height*k-wp,q,q,'S');if(c.a<1)alpha(1)}
+      }else ['Top','Right','Bottom','Left'].forEach((sd,i)=>{
+        const w=bw[i];if(!w)return;const c=rgba(cs[`border${sd}Color`]),wp=w*k,st=cs[`border${sd}Style`];
+        if(st==='dashed'||st==='dotted'){if(!c||!c.a)return;if(c.a<1)alpha(c.a);P.setDrawColor(c.r,c.g,c.b);P.setLineWidth(wp);P.setLineDashPattern(st==='dotted'?[wp,wp]:[wp*3,wp*3],0);
+          const x1=X(r.left),y1=Y(r.top),x2=X(r.right),y2=Y(r.bottom);
+          if(sd==='Top')P.line(x1,y1+wp/2,x2,y1+wp/2);if(sd==='Bottom')P.line(x1,y2-wp/2,x2,y2-wp/2);if(sd==='Left')P.line(x1+wp/2,y1,x1+wp/2,y2);if(sd==='Right')P.line(x2-wp/2,y1,x2-wp/2,y2);
+          P.setLineDashPattern([],0);if(c.a<1)alpha(1);return}
         if(sd==='Top')fill(c,X(r.left),Y(r.top),r.width*k,wp);
         if(sd==='Bottom')fill(c,X(r.left),Y(r.bottom)-wp,r.width*k,wp);
         if(sd==='Left')fill(c,X(r.left),Y(r.top),wp,r.height*k);
         if(sd==='Right')fill(c,X(r.right)-wp,Y(r.top),wp,r.height*k);
-      }
+      });
       if(tag==='img'&&el.complete&&el.naturalWidth){
         const w=r.width*k,h=r.height*k;let src=el.src,fmt=/^data:image\/png/i.test(src)?'PNG':'JPEG';
-        if(cs.objectFit==='cover'||!/^data:image\/(png|jpe?g)/i.test(src)){src=await coverImg(el,w,h);fmt='JPEG'}
+        if(cs.objectFit==='cover'||cs.objectFit==='contain'||!/^data:image\/(png|jpe?g)/i.test(src)){src=await fitImg(el,w,h,cs.objectFit);fmt='PNG'}
         P.addImage(src,fmt,X(r.left),Y(r.top),w,h,undefined,'FAST');
       }
       if(tag==='svg'&&r.width){try{P.addImage(await rasterSvg(el,r.width*k,r.height*k),'PNG',X(r.left),Y(r.top),r.width*k,r.height*k,undefined,'FAST')}catch(e){}}
-      if(tag==='li'){
-        rg.selectNodeContents(el);const q=rg.getClientRects()[0];if(!q)continue;
-        const fs=parseFloat(cs.fontSize),base=Y(q.top+(q.height-(ASC+DESC)*fs)/2+ASC*fs),c=rgba(cs.color)||{r:30,g:41,b:59},pt=fs*.75;
-        P.setFillColor(c.r,c.g,c.b);P.setTextColor(c.r,c.g,c.b);
-        if(cs.listStyleType==='decimal'){P.setFont('Roboto','normal');P.setFontSize(pt);P.text([...el.parentElement.children].indexOf(el)+1+'.',X(r.left)-3,base,{align:'right'})}
-        else if(cs.listStyleType!=='none')P.circle(X(r.left)-pt*.65,base-pt*.32,pt*.16,'F');
+      if(tag==='li'&&cs.display==='list-item'&&cs.listStyleType!=='none'){
+        // numeri: testo "1. " subito prima del paragrafo; pallini: forme di 1/3 della dimensione del testo, come le disegna il browser
+        rg.selectNodeContents(el);const q=[...rg.getClientRects()].find(x=>x.width>0);if(!q)continue;
+        const lt=cs.listStyleType,items=[...el.parentElement.children].filter(x=>x.tagName==='LI'),idx=(parseInt(el.parentElement.getAttribute('start'))||1)+items.indexOf(el);
+        const c=rgba(cs.color)||{r:30,g:41,b:59},base=Y(q.top)+baseOff(cs,page)*k,pt=parseFloat(cs.fontSize)*.75;
+        setFont(cs);P.setTextColor(c.r,c.g,c.b);P.setFillColor(c.r,c.g,c.b);P.setDrawColor(c.r,c.g,c.b);
+        const mk=lt==='decimal'||lt==='decimal-leading-zero'?(lt==='decimal'?'':idx<10?'0':'')+idx+'.':/^lower-(alpha|latin)$/.test(lt)?String.fromCharCode(96+idx)+'.':/^upper-(alpha|latin)$/.test(lt)?String.fromCharCode(64+idx)+'.':'';
+        if(mk)P.text(mk,X(r.left)-P.getTextWidth(mk+' '),base,{baseline:'alphabetic'});
+        else{const d=pt/3,cx=X(r.left)-pt*.971,cy=base-pt/4;
+          if(lt==='square')P.rect(cx-d/2,cy-d/2,d,d,'F');else if(lt==='circle'){P.setLineWidth(d*.12);P.circle(cx,cy,d/2-d*.06,'S')}else P.circle(cx,cy,d/2,'F')}
       }
       continue;
     }
     const t=n.data;if(!t.trim())continue;
-    const el=n.parentElement,cs=getComputedStyle(el),fs=parseFloat(cs.fontSize),pt=fs*.75,c=rgba(cs.color)||{r:0,g:0,b:0};
-    const bold=parseInt(cs.fontWeight)>=600,ital=cs.fontStyle==='italic';
-    P.setFont('Roboto',bold?(ital?'bolditalic':'bold'):(ital?'italic':'normal'));P.setFontSize(pt);P.setTextColor(c.r,c.g,c.b);
-    const cps=parseFloat(cs.letterSpacing)||0,up=cs.textTransform==='uppercase';
+    const el=n.parentElement,cs=getComputedStyle(el),fs=parseFloat(cs.fontSize),pt=fs*.75,c=rgba(cs.color)||{r:0,g:0,b:0,a:1};
+    if(c.a===0)continue;
+    setFont(cs);P.setTextColor(c.r,c.g,c.b);
+    const off=baseOff(cs,page),cps=parseFloat(cs.letterSpacing)||0,tt=cs.textTransform;
     const und=!!el.closest('u,a')||/underline/.test(cs.textDecorationLine),strk=!!el.closest('s,strike,del')||/line-through/.test(cs.textDecorationLine);
+    const tx=s=>tt==='uppercase'?s.toUpperCase():tt==='lowercase'?s.toLowerCase():s;
+    if(c.a<1)alpha(c.a);
+    const draw=(s,q,sp)=>{ // s: testo che sta su una sola riga, q: il suo riquadro nel browser
+      const base=Y(q.top)+off*k,x=X(q.left),wd=tx(s),nat=P.getTextWidth(wd),ch=[...wd].length;
+      // spaziatura calcolata perché il testo occupi esattamente la larghezza che ha nel browser
+      P.text(wd+(sp?' ':''),x,base,{charSpace:ch?(q.width*k-nat)/ch:cps*k,baseline:'alphabetic'});
+      if(und||strk){P.setDrawColor(c.r,c.g,c.b);P.setLineWidth(pt*.06);const yy=und?base+pt*.12:base-pt*.3;P.line(x,yy,x+q.width*k,yy)}
+    };
     const re=/\S+/g;let m;
     while(m=re.exec(t)){
-      rg.setStart(n,m.index);rg.setEnd(n,m.index+m[0].length);const q=rg.getClientRects()[0];
-      if(!q||q.top>pr.bottom||q.bottom<pr.top)continue;
-      const base=Y(q.top+(q.height-(ASC+DESC)*fs)/2+ASC*fs),x=X(q.left);
-      let wd=up?m[0].toUpperCase():m[0];
-      // spaziatura calcolata perché la parola occupi esattamente la larghezza che ha nel browser
-      const nat=P.getTextWidth(wd),chars=[...wd].length,sp=chars?(q.width*k-nat)/chars:cps*k;
-      if(/\s/.test(t[m.index+m[0].length]||''))wd+=' ';
-      P.text(wd,x,base,{charSpace:sp,baseline:'alphabetic'});
-      if(und||strk){P.setDrawColor(c.r,c.g,c.b);P.setLineWidth(pt*.06);const yy=und?base+pt*.12:base-pt*.3;P.line(x,yy,x+q.width*k,yy)}
+      const s0=m.index,w=m[0],sp=/\s/.test(t[s0+w.length]||'');
+      rg.setStart(n,s0);rg.setEnd(n,s0+w.length);const rs=[...rg.getClientRects()].filter(q=>q.width>0);
+      if(!rs.length||rs.every(q=>q.top>pr.bottom||q.bottom<pr.top))continue;
+      if(rs.length===1&&[...tx(w)].every(has)){draw(w,rs[0],sp);continue}
+      // parola spezzata su più righe o con simboli speciali: carattere per carattere, raggruppati per riga
+      const runs=[];let i=s0;
+      for(const ch of w){rg.setStart(n,i);rg.setEnd(n,i+ch.length);i+=ch.length;const q=[...rg.getClientRects()].find(x=>x.width>0);if(!q)continue;
+        const g=has(tx(ch)),L=runs[runs.length-1];
+        if(L&&L.g===g&&Math.abs(L.q.top-q.top)<1){L.q.width=q.right-L.q.left;L.s+=ch}else runs.push({s:ch,q:{left:q.left,top:q.top,height:q.height,width:q.width},g})}
+      runs.forEach((u,j)=>{if(u.g)draw(u.s,u.q,sp&&j===runs.length-1);else rasterText(tx(u.s),cs,u.q,off)});
     }
+    if(c.a<1)alpha(1);
   }
 }
 async function pdf(){
   if(busy)return;busy=true;flush();closePop();const prev=mode;
   try{
-    toast('Preparo il PDF…');await pdfReady();
+    toast('Preparo il PDF…');
     if(prev==='edit')setMode('preview');refresh();await document.fonts.ready;
+    const pages=$$('.page',doc),fams=new Set(['Roboto',...$$('.page *',doc).map(e=>famOf(getComputedStyle(e)))]);
+    await pdfReady(fams);
     const P=new pdfLib({unit:'pt',format:'a4',compress:true});
-    for(const [s,d] of Object.entries(fontB64)){const f=`Roboto-${s}.ttf`;P.addFileToVFS(f,d);P.addFont(f,'Roboto',s)}
-    const pages=$$('.page',doc);
-    for(let i=0;i<pages.length;i++){if(i)P.addPage('a4');await paintPage(P,pages[i])}
+    for(const f of fams)for(const [s,v] of Object.entries(VAR)){const fn=`${FONTS[f]}-${v}.ttf`;P.addFileToVFS(fn,fontB64[FONTS[f]+'-'+v]);P.addFont(fn,f,s)}
+    // misure prese a grandezza reale (zoom 100%, come in stampa): a zoom ridotto il browser arrotonda le posizioni
+    const sy=scrollY/(parseFloat(zoomEl.style.zoom)||1);zoomEl.style.zoom=1;
+    try{for(let i=0;i<pages.length;i++){if(i)P.addPage('a4');await paintPage(P,pages[i])}}
+    finally{fit();scrollTo(0,sy*(parseFloat(zoomEl.style.zoom)||1))}
     const n=($('h1',doc)?.innerText||'').trim().toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
     P.setProperties({title:'Curriculum Vitae '+n,author:n,creator:'CV editor'});
     download('CV-'+(n.replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'')||'documento')+'.pdf',P.output('blob'),'application/pdf');
